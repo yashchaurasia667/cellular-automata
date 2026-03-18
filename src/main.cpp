@@ -103,6 +103,14 @@ int main()
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
 
+    unsigned int fbo;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    unsigned int automata_tex;
+    glGenTextures(1, &automata_tex);
+    glBindTexture(GL_TEXTURE_2D, automata_tex);
+
     glClearColor(0.4, 0.4, 0.4, 0.4);
     while (!glfwWindowShouldClose(window))
     {
