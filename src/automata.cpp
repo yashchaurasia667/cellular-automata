@@ -1,5 +1,5 @@
+#include "automata.h"
 #include <iostream>
-#include <vector>
 #include <cstdlib>
 #include <ctime>
 
@@ -75,6 +75,7 @@ void briansBrain()
   cells = next;
 }
 
+#ifdef STANDALONE
 int main()
 {
   int side = 10;
@@ -96,3 +97,4 @@ int main()
   }
   return 0;
 }
+#endif

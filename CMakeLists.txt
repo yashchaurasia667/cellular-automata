@@ -26,10 +26,12 @@ add_library(depends STATIC
   "${SRC}/learnOpengl/utils.cpp"
   "${SRC}/learnOpengl/mesh.cpp"
   "${SRC}/learnOpengl/model.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/automata.cpp"
 )
 target_include_directories(depends
   PUBLIC
   "${INCLUDE}"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/"
 )
 target_compile_options(depends
   PRIVATE
