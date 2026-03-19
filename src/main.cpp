@@ -5,12 +5,14 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
+#include <unistd.h>
+
 #include <automata.h>
-#include <learnOpengl/shader.h>
 #include <learnOpengl/camera.h>
+#include <learnOpengl/shader.h>
 #include <learnOpengl/utils.h>
 
-unsigned int scr_width = 1280, scr_height = 720;
+unsigned int scr_width = 800, scr_height = 600;
 unsigned char *automataTex = new unsigned char[scr_width * scr_height * 3];
 
 void framebufferSizeCallback(GLFWwindow *window, int width, int height);
@@ -24,7 +26,8 @@ int main()
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  GLFWwindow *window = glfwCreateWindow(scr_width, scr_height, "TITLE_HERE", NULL, NULL);
+  GLFWwindow *window =
+      glfwCreateWindow(scr_width, scr_height, "TITLE_HERE", NULL, NULL);
   if (window == nullptr)
   {
     std::cout << "Failed to create a GLFW window" << std::endl;
@@ -50,7 +53,8 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, scr_width, scr_height, 0, GL_RGB, GL_UNSIGNED_BYTE, automataTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, scr_width, scr_height, 0, GL_RGB,
+                 GL_UNSIGNED_BYTE, automataTex);
 
     shader.bind();
     shader.setInt("renderTex", 0);
@@ -58,12 +62,14 @@ int main()
     glClearColor(0.4, 0.4, 0.4, 0.4);
     while (!glfwWindowShouldClose(window))
     {
+      // sleep(1);
       processInput(window);
       glClear(GL_COLOR_BUFFER_BIT);
 
       generateAutomataTex();
       glBindTexture(GL_TEXTURE_2D, renderTex);
-      glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, scr_width, scr_height, GL_RGB, GL_UNSIGNED_BYTE, automataTex);
+      glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, scr_width, scr_height, GL_RGB,
+                      GL_UNSIGNED_BYTE, automataTex);
       shader.bind();
       glActiveTexture(GL_TEXTURE0);
       glBindTexture(GL_TEXTURE_2D, renderTex);
@@ -95,14 +101,19 @@ void processInput(GLFWwindow *window)
 void generateAutomataTex()
 {
   int indx = 0;
-  briansBrain();
+  zhabotinsky(70, 3);
+
+  const unsigned char darkBlue[3] = {0, 0, 0};
+  const unsigned char darkYellow[3] = {255, 255, 255};
+
   for (int y = 0; y < scr_height; y++)
     for (int x = 0; x < scr_width; x++)
     {
-      unsigned char value = (unsigned char)(((float)cells[y][x] / 2.0f) * 255.0f);
-      automataTex[indx + 0] = value;
-      automataTex[indx + 1] = value;
-      automataTex[indx + 2] = value;
-      indx+=3;
+      float t = ((float)cells[y][x] / 100.0f); // 0.0 to 1.0
+
+      automataTex[indx + 0] = (unsigned char)(darkBlue[0] + t * (darkYellow[0] - darkBlue[0]));
+      automataTex[indx + 1] = (unsigned char)(darkBlue[1] + t * (darkYellow[1] - darkBlue[1]));
+      automataTex[indx + 2] = (unsigned char)(darkBlue[2] + t * (darkYellow[2] - darkBlue[2]));
+      indx += 3;
     }
 }

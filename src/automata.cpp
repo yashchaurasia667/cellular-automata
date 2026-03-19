@@ -75,6 +75,46 @@ void briansBrain()
   cells = next;
 }
 
+int getNeighborAverage(int i, int j)
+{
+  int average = 0;
+  int rows = cells.size(), cols = cells[i].size();
+
+  for (int di = -1; di <= 1; di++)
+    for (int dj = -1; dj <= 1; dj++)
+    {
+      if (di == 0 && dj == 0)
+        continue;
+
+      // wrap around edges
+      int ni = (i + di + rows) % rows;
+      int nj = (j + dj + cols) % cols;
+
+      average += cells[ni][nj];
+    }
+
+  average /= 8;
+  return average;
+}
+
+void zhabotinsky(int num_states, int g)
+{
+  auto next = cells;
+  for (int y = 0; y < cells.size(); y++)
+  {
+    for (int x = 0; x < cells[y].size(); x++)
+    {
+      if (cells[y][x] == 0)
+        next[y][x] = (getNeighborAverage(y, x) + g) % num_states;
+      else if (cells[y][x] == num_states-1)
+        next[y][x] = 0;
+      else if (cells[y][x] > 0 && cells[y][x] < num_states)
+        next[y][x] = getNeighborAverage(y, x);
+    }
+  }
+  cells = next;
+}
+
 #ifdef STANDALONE
 int main()
 {
