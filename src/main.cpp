@@ -101,7 +101,7 @@ void processInput(GLFWwindow *window)
 void generateAutomataTex()
 {
   int indx = 0;
-  zhabotinsky(70, 3);
+  zhabotinsky(100, 5);
 
   const unsigned char darkBlue[3] = {0, 0, 0};
   const unsigned char darkYellow[3] = {255, 255, 255};

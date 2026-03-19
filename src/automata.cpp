@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <math.h>
 
 enum states
 {
@@ -86,15 +87,13 @@ int getNeighborAverage(int i, int j)
       if (di == 0 && dj == 0)
         continue;
 
-      // wrap around edges
       int ni = (i + di + rows) % rows;
       int nj = (j + dj + cols) % cols;
 
       average += cells[ni][nj];
     }
 
-  average /= 8;
-  return average;
+  return average / 8;
 }
 
 void zhabotinsky(int num_states, int g)
@@ -106,10 +105,12 @@ void zhabotinsky(int num_states, int g)
     {
       if (cells[y][x] == 0)
         next[y][x] = (getNeighborAverage(y, x) + g) % num_states;
-      else if (cells[y][x] == num_states-1)
+      else if (cells[y][x] == num_states - 1)
         next[y][x] = 0;
       else if (cells[y][x] > 0 && cells[y][x] < num_states)
         next[y][x] = getNeighborAverage(y, x);
+      else
+        next[y][x] = cells[y][x] + 1;
     }
   }
   cells = next;

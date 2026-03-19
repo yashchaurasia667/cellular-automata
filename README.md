@@ -20,3 +20,5 @@ A demonstration of various cellular automata
 ## Screenshots
 
 ![brians brian](./img/brians.png)
+![belusov zhabotinsky](./img/zhabotinsky.png)
+![belusov zhabotinsky](./img/zhabotinsky2.png)
