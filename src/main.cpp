@@ -6,6 +6,9 @@
 
 #include <iostream>
 #include <unistd.h>
+#include <random>
+#include <ctime>
+#include <cstdlib>
 
 #include <automata.h>
 #include <learnOpengl/camera.h>
@@ -21,6 +24,7 @@ void generateAutomataTex();
 
 int main()
 {
+  std::srand(std::time(0));
   init(scr_width, scr_height);
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -81,6 +85,7 @@ int main()
   }
 
   glfwTerminate();
+  delete[] automataTex;
   return 0;
 }
 
@@ -101,19 +106,21 @@ void processInput(GLFWwindow *window)
 void generateAutomataTex()
 {
   int indx = 0;
+  const std::vector<int> list{0, 1, 2, 5};
+  int g = list[rand() % list.size()];
+
   zhabotinsky(100, 5);
 
-  const unsigned char darkBlue[3] = {0, 0, 0};
-  const unsigned char darkYellow[3] = {255, 255, 255};
+  glm::vec3 colorA = glm::vec3(0.0f, 0.0f, 0.0f);
+  glm::vec3 colorB = glm::vec3(1.0f, 1.0f, 1.0f);
 
   for (int y = 0; y < scr_height; y++)
     for (int x = 0; x < scr_width; x++)
     {
-      float t = ((float)cells[y][x] / 100.0f); // 0.0 to 1.0
-
-      automataTex[indx + 0] = (unsigned char)(darkBlue[0] + t * (darkYellow[0] - darkBlue[0]));
-      automataTex[indx + 1] = (unsigned char)(darkBlue[1] + t * (darkYellow[1] - darkBlue[1]));
-      automataTex[indx + 2] = (unsigned char)(darkBlue[2] + t * (darkYellow[2] - darkBlue[2]));
-      indx += 3;
+      float t = ((float)cells[y][x] / 100.0f);
+      glm::vec3 finalCol = glm::mix(colorA, colorB, t);
+      automataTex[indx++] = (unsigned char)(finalCol.r * 255.0f);
+      automataTex[indx++] = (unsigned char)(finalCol.g * 255.0f);
+      automataTex[indx++] = (unsigned char)(finalCol.b * 255.0f);
     }
 }

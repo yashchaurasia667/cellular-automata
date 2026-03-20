@@ -15,7 +15,7 @@ std::vector<std::vector<int>> cells;
 
 void init(int width, int height)
 {
-  std::srand(std::time(0));
+  // std::srand(std::time(0));
   cells.assign(height, std::vector<int>(width, ON));
   for (int i = 0; i < height; i++)
     for (int j = 0; j < width; j++)
